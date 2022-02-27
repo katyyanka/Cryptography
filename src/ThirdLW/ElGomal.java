@@ -59,7 +59,7 @@ public class ElGomal {
         //
         System.out.println("DECRYPTION");
         for(int i = 0; i < aList.size(); i++){
-            BigInteger res = bList.get(i).multiply(aList.get(i).pow(secretKey.modInverse(new BigInteger("1")).intValue())).mod(p);
+            BigInteger res = bList.get(i).multiply(aList.get(i).pow(secretKey.modInverse(new BigInteger("1")).intValue())).mod(p);//????
             System.out.println(res);
             System.out.println("+=+=+=+=+=+");
         }
