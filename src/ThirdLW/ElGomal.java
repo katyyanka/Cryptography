@@ -28,42 +28,36 @@ public class ElGomal {
         System.out.println("p = " + p);
         System.out.println("q = " + q);
         System.out.println("y = " + y);
-
-        System.out.print("Введите сообщение --> ");
-        String s = scan.next();
-
-//        BigInteger result = a.gcd(b);
-
-        //for(char ch: s.toCharArray()){
-
-        BigInteger m = new BigInteger(/*String.valueOf((int)ch)*/s);
-        System.out.println("Сообщение = " + m);
-
-//        BigInteger k = new BigInteger(64, sc); //Выбирается случайное секретное число k(1, p−1), взаимно простое с p−1.
-        // zdes proverka
         BigInteger k;
         do {
             k = new BigInteger(16, sc);
-            System.out.println(k);
         } while (k.intValue() < 1 & k.intValue() > p.subtract(new BigInteger("1")).intValue() & k.gcd(p).intValue() != 1);
-//        k = BigInteger.valueOf(9);
-        System.out.println("целое число k такое, что 1 < k < (p − 1) ---> k = " + k);
-        BigInteger a = q.modPow(k, p);
-        aList.add(a);
-        System.out.println("Первая часть зашифрованного сообщения q^k mod p = " + a);
-        BigInteger b = y.pow(k.intValue()).multiply(m).mod(p);
-        System.out.println("Вторая часть зашифрованного сообщения (y^k)*m mod p = " + b);
-        bList.add(b);
-        System.out.println("__________________________________________________________");
+        System.out.println("Целое число k такое, что 1 < k < (p − 1): " + k);
+
+        System.out.print("Введите сообщение --> ");
+        String s = scan.nextLine();
+
+        for(char ch: s.toCharArray()){
+            BigInteger m = new BigInteger(String.valueOf((int)ch));
+            System.out.println("Сообщение = " + m + "(" + ch + ")");
+
+            BigInteger a = q.modPow(k, p);
+            aList.add(a);
+            System.out.println("Первая часть зашифрованного сообщения q^k mod p = " + a);
+            BigInteger b = y.pow(k.intValue()).multiply(m).mod(p);
+            System.out.println("Вторая часть зашифрованного сообщения (y^k)*m mod p = " + b);
+            bList.add(b);
+            System.out.println("__________________________________________________________");
+        }
+
 
         System.out.println("DECRYPTION");
         for (int i = 0; i < aList.size(); i++) {
 
             BigInteger expKatya = p.subtract(BigInteger.valueOf(1)).subtract(secretKey);
             BigInteger resKatya = bList.get(i).multiply(aList.get(i).pow(expKatya.intValue())).mod(p);
-
-            System.out.println(resKatya);
-            System.out.println("☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️");
+            System.out.print((char) resKatya.intValue());
         }
+        System.out.println("\n☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️☻☺️");
     }
 }
