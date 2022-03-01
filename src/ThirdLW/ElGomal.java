@@ -36,7 +36,7 @@ public class ElGomal {
         System.out.println("Целое число k такое, что 1 < k < (p − 1): " + k);
 
         String s = "";
-        try(FileReader reader = new FileReader("/Users/nikitahodarenok/Documents/IdeaProjects/Cryptography/src/ThirdLW/original.txt"))
+        try(FileReader reader = new FileReader("src/ThirdLW/original.txt"))
         {
             int c;
             while((c=reader.read())!=-1){
@@ -63,14 +63,14 @@ public class ElGomal {
             System.out.println("__________________________________________________________");
         }
 
-        try(FileWriter writer = new FileWriter("/Users/nikitahodarenok/Documents/IdeaProjects/Cryptography/src/ThirdLW/encrypt.txt", false))  {
+        try(FileWriter writer = new FileWriter("src/ThirdLW/encrypt.txt", false))  {
             for (int i = 0; i < aList.size(); i++) {
                 writer.write(aList.get(i).toString());
                 writer.append('\n');
                 writer.write(bList.get(i).toString());
                 writer.append('\n');
-                writer.write("_______________");
-                writer.append('\n');
+                //writer.write("_______________");
+                //writer.append('\n');
             }
             writer.flush();
         }
@@ -81,14 +81,13 @@ public class ElGomal {
         System.out.println("==DECRYPTION==");
         String result = "";
         for (int i = 0; i < aList.size(); i++) {
-
             BigInteger expKatya = p.subtract(BigInteger.valueOf(1)).subtract(secretKey);
             BigInteger resKatya = bList.get(i).multiply(aList.get(i).pow(expKatya.intValue())).mod(p);
             result = result + String.valueOf((char) resKatya.intValue());
         }
         System.out.println("Результат дешифрации: " + result);
 
-        try(FileWriter writer = new FileWriter("/Users/nikitahodarenok/Documents/IdeaProjects/Cryptography/src/ThirdLW/decryption.txt", false))  {
+        try(FileWriter writer = new FileWriter("src/ThirdLW/decryption.txt", false))  {
             writer.write(result);
             writer.flush();
         }
