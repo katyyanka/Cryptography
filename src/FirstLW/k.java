@@ -5,8 +5,8 @@ public class k {
     private static final short NUMBER_OF_ENGLISH_LETTERS = 26;
 
     public static void main(String[] args) {
-
-        int i = 0;
+//тут Катя играется с тем, что не работает, работает или тем, что нужно
+       /* int i = 0;
         while (true) {
             if ((3 * i) % NUMBER_OF_ENGLISH_LETTERS == 1) {
                 System.out.println(i);
@@ -16,8 +16,8 @@ public class k {
                 System.out.println("число больше миллиона");
                 break;
             }
-            i++;
+            i++;*/
+       // System.out.println(9/Math.pow(6,8)%11);
         }
 
-    }
 }
