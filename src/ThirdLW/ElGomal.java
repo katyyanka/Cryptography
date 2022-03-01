@@ -7,9 +7,6 @@ import java.io.*;
 import java.util.Scanner;
 
 public class ElGomal {
-
-
-
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
         BigInteger p, q, y, secretKey;
@@ -17,57 +14,86 @@ public class ElGomal {
         ArrayList<BigInteger> bList = new ArrayList<>();
 
         Random sc = new SecureRandom();
-        secretKey = new BigInteger("1234");
-        //
-        // public key calculation
-        //
+        secretKey = new BigInteger("3");
+
         System.out.println("secretKey = " + secretKey);
-        p = BigInteger.probablePrime(64, sc);
-        q = new BigInteger("3");
+        p = BigInteger.probablePrime(16, sc);
+        q = new BigInteger("2");
+
+        /* p = BigInteger.valueOf(11);
+        q = BigInteger.valueOf(2);
+        secretKey = BigInteger.valueOf(8);*/
+        /* значение для теста: p=11,q=2,x=8,y=3,a=6,b=9,m=5,k=9*/
+
         y = q.modPow(secretKey, p);
         System.out.println("p = " + p);
         System.out.println("q = " + q);
         System.out.println("y = " + y);
-        //
-        // Encryption
-        //
-        System.err.print("Введите сообщение --> ");
-        String s = scan.next();
+        BigInteger k;
+        do {
+            k = new BigInteger(16, sc);
+        } while (k.intValue() < 1 & k.intValue() > p.subtract(new BigInteger("1")).intValue() & k.gcd(p).intValue() != 1);
+        System.out.println("Целое число k такое, что 1 < k < (p − 1): " + k);
+
+        String s = "";
+        try(FileReader reader = new FileReader("/Users/nikitahodarenok/Documents/IdeaProjects/Cryptography/src/ThirdLW/original.txt"))
+        {
+            int c;
+            while((c=reader.read())!=-1){
+                s = s + String.valueOf((char)c);
+                System.out.print((char)c);
+            }
+        }
+        catch(IOException ex){
+            System.err.println(ex.getMessage());
+            System.out.print("Введите сообщение --> ");
+            s = scan.nextLine();
+        }
 
         for(char ch: s.toCharArray()){
-
             BigInteger m = new BigInteger(String.valueOf((int)ch));
-            System.out.println("Сообщение = " + m);
+            System.out.println("Сообщение = " + m + "(" + ch + ")");
 
-            BigInteger k = new BigInteger(64, sc); //Выбирается случайное секретное число k(1, p−1), взаимно простое с p−1.
-            System.out.println("целое число k такое, что 1 < k < (p − 1) ---> k = " + k);
-
-//            BigInteger EC = m.multiply(y.modPow(k, p)).mod(p);
             BigInteger a = q.modPow(k, p);
             aList.add(a);
             System.out.println("Первая часть зашифрованного сообщения q^k mod p = " + a);
-//            BigInteger crmodp = a.modPow(secretKey, p);
-            BigInteger b = y.mod(k).multiply(m).mod(p);
+            BigInteger b = y.pow(k.intValue()).multiply(m).mod(p);
             System.out.println("Вторая часть зашифрованного сообщения (y^k)*m mod p = " + b);
             bList.add(b);
-            System.out.println("------------");
+            System.out.println("__________________________________________________________");
         }
 
-
-        //
-        // Decryption
-        //
-        System.out.println("DECRYPTION");
-        for(int i = 0; i < aList.size(); i++){
-            BigInteger res = bList.get(i).multiply(aList.get(i).pow(secretKey.modInverse(new BigInteger("1")).intValue())).mod(p);//????
-            System.out.println(res);
-            System.out.println("+=+=+=+=+=+");
+        try(FileWriter writer = new FileWriter("/Users/nikitahodarenok/Documents/IdeaProjects/Cryptography/src/ThirdLW/encrypt.txt", false))  {
+            for (int i = 0; i < aList.size(); i++) {
+                writer.write(aList.get(i).toString());
+                writer.append('\n');
+                writer.write(bList.get(i).toString());
+                writer.append('\n');
+                writer.write("_______________");
+                writer.append('\n');
+            }
+            writer.flush();
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
         }
 
+        System.out.println("==DECRYPTION==");
+        String result = "";
+        for (int i = 0; i < aList.size(); i++) {
 
-//        BigInteger d = crmodp.modInverse(p);
-//        BigInteger ad = d.multiply(EC).mod(p);
-//        System.out.println("Дешифрованное сообщение: " + ad);
+            BigInteger expKatya = p.subtract(BigInteger.valueOf(1)).subtract(secretKey);
+            BigInteger resKatya = bList.get(i).multiply(aList.get(i).pow(expKatya.intValue())).mod(p);
+            result = result + String.valueOf((char) resKatya.intValue());
+        }
+        System.out.println("Результат дешифрации: " + result);
 
+        try(FileWriter writer = new FileWriter("/Users/nikitahodarenok/Documents/IdeaProjects/Cryptography/src/ThirdLW/decryption.txt", false))  {
+            writer.write(result);
+            writer.flush();
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }
