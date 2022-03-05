@@ -2,38 +2,34 @@ package SixthLW;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
 public class Decode {
     static final String STEGIMAGEFILE = "src/SixthLW/encoded.jpeg";
-    static final String DECODEDMESSAGEFILE = "src/SixthLW/encodedMessage.txt";
 
-    public static String b_msg="";
+    public static String b_msg = "";
     public static int len = 0;
 
     public static void main(String[] args) throws Exception {
 
-        BufferedImage yImage=readImageFile(STEGIMAGEFILE);
+        BufferedImage yImage = readImageFile(STEGIMAGEFILE);
 
         DecodeTheMessage(yImage);
-        String msg="";
-//System.out.println("len is "+len*8);
-        for(int i=0;i<len*8;i=i+8){
+        String msg = "";
+        for(int i = 0; i < len * 8; i = i + 8){
 
-            String sub=b_msg.substring(i,i+8);
+            String sub = b_msg.substring(i, i + 8);
 
-            int m=Integer.parseInt(sub,2);
-            char ch=(char) m;
+            int m = Integer.parseInt(sub,2);
+            char ch = (char) m;
             System.out.println("m "+m+" c "+ch);
-            msg+=ch;
+            msg += ch;
         }
-        PrintWriter out = new PrintWriter(new FileWriter(DECODEDMESSAGEFILE, true), true);
-        out.write(msg);
-        out.close();
+
+        System.out.println(msg);
     }
+
     public static BufferedImage readImageFile(String COVERIMAGEFILE){
         BufferedImage theImage = null;
         File p = new File (COVERIMAGEFILE);
@@ -45,7 +41,6 @@ public class Decode {
         }
         return theImage;
     }
-
 
     public static void DecodeTheMessage (BufferedImage yImage){
 
@@ -68,8 +63,8 @@ public class Decode {
                     len=Integer.parseInt(bx_msg,2);
 
                 }
-                else if(currentBitEntry<len*8){
-//System.out.println("enc "+yImage.getRGB(x, y)+" dec "+yImage.getRGB(x, y)+" "+b_msg);
+                else if(currentBitEntry < len * 8){
+
                     int currentPixel = yImage.getRGB(x, y);
                     int red = currentPixel>>16;
                     red = red & 255;
@@ -77,12 +72,11 @@ public class Decode {
                     green = green & 255;
                     int blue = currentPixel;
                     blue = blue & 255;
-                    String x_s=Integer.toBinaryString(blue);
-                    b_msg+=x_s.charAt(x_s.length()-1);
+                    String x_s = Integer.toBinaryString(blue);
+                    b_msg += x_s.charAt(x_s.length()-1);
 
 
                     currentBitEntry++;
-                    //System.out.println("curre "+currentBitEntry);
                 }
             }
         }
