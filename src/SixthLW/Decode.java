@@ -6,14 +6,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 public class Decode {
-    static final String STEGIMAGEFILE = "src/SixthLW/encoded.jpeg";
+
+    static final String ENCODEDIMAGE = "src/SixthLW/encoded.jpeg";
 
     public static String b_msg = "";
     public static int len = 0;
 
     public static void main(String[] args) throws Exception {
 
-        BufferedImage yImage = readImageFile(STEGIMAGEFILE);
+        BufferedImage yImage = getEncodedImage(ENCODEDIMAGE);
 
         DecodeTheMessage(yImage);
         String msg = "";
@@ -23,14 +24,14 @@ public class Decode {
 
             int m = Integer.parseInt(sub,2);
             char ch = (char) m;
-            System.out.println("m "+m+" c "+ch);
+            System.out.println("Char number was in image: " + m + " - " + ch);
             msg += ch;
         }
 
-        System.out.println(msg);
+        System.out.println("Result message was in image: " + msg);
     }
 
-    public static BufferedImage readImageFile(String COVERIMAGEFILE){
+    public static BufferedImage getEncodedImage(String COVERIMAGEFILE){
         BufferedImage theImage = null;
         File p = new File (COVERIMAGEFILE);
         try{
@@ -42,44 +43,39 @@ public class Decode {
         return theImage;
     }
 
-    public static void DecodeTheMessage (BufferedImage yImage){
+    public static void DecodeTheMessage(BufferedImage yImage){
 
-        int j=0;
-        int currentBitEntry=0;
-        String bx_msg="";
+        int currentBitEntry = 0;
+        String bx_msg = "";
         for (int x = 0; x < yImage.getWidth(); x++){
-            for ( int y = 0; y < yImage.getHeight(); y++){
-                if(x==0&&y<8){
-                    //System.out.println("enc "+yImage.getRGB(x, y)+" dec "+yImage.getRGB(x, y)+" "+b_msg);
+            for (int y = 0; y < yImage.getHeight(); y++){
+                if(x == 0 && y < 8){
                     int currentPixel = yImage.getRGB(x, y);
-                    int red = currentPixel>>16;
-                    red = red & 255;
-                    int green = currentPixel>>8;
-                    green = green & 255;
-                    int blue = currentPixel;
-                    blue = blue & 255;
-                    String x_s=Integer.toBinaryString(blue);
-                    bx_msg+=x_s.charAt(x_s.length()-1);
-                    len=Integer.parseInt(bx_msg,2);
+//                    int red = currentPixel>>16;
+////                    red = red & 255;
+//                    int green = currentPixel>>8;
+////                    green = green & 255;
+//                    blue = blue & 255;
+                    String x_s = Integer.toBinaryString(currentPixel);
+                    bx_msg += x_s.charAt(x_s.length() - 1);
+                    len = Integer.parseInt(bx_msg,2);
 
                 }
                 else if(currentBitEntry < len * 8){
 
                     int currentPixel = yImage.getRGB(x, y);
-                    int red = currentPixel>>16;
-                    red = red & 255;
-                    int green = currentPixel>>8;
-                    green = green & 255;
-                    int blue = currentPixel;
-                    blue = blue & 255;
-                    String x_s = Integer.toBinaryString(blue);
-                    b_msg += x_s.charAt(x_s.length()-1);
-
-
+//                    int red = currentPixel>>16;
+//                    red = red & 255;
+//                    int green = currentPixel>>8;
+//                    green = green & 255;
+//                    int blue = currentPixel;
+//                    blue = blue & 255;
+                    String x_s = Integer.toBinaryString(currentPixel);
+                    b_msg += x_s.charAt(x_s.length() - 1);
                     currentBitEntry++;
                 }
             }
         }
-        System.out.println("bin value of msg hided in img is "+b_msg);
+        System.out.println("In image was encoded binary: " + b_msg);
     }
 }
