@@ -25,6 +25,11 @@ public class ElGomal {
         secretKey = BigInteger.valueOf(8);*/
         /* значение для теста: p=11,q=2,x=8,y=3,a=6,b=9,m=5,k=9*/
 
+
+        for (int i = 0; i<p.intValue()-1;i++){
+
+        }
+
         y = q.modPow(secretKey, p);
         System.out.println("p = " + p);
         System.out.println("q = " + q);
