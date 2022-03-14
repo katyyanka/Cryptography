@@ -12,8 +12,8 @@ public class Main {
                 }
             } catch (Exception ignore) {}
         System.out.println("+-+-+-+-+-+-+-+RESULT+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"+"\n");
-        System.out.println(Integer.toHexString(new FNV1A().FNV1AHash(builder.toString()))+"\n\n");
+        System.out.println(Long.toHexString(new FNV1A().FNV1AHash(builder.toString()))+"\n\n");
         System.out.println("+-+-+-+-+-+-+-+RESULT OF BSUIR+-+-+-+-+-+-+-+-+-+-+-+"+"\n");
-        System.out.println(Integer.toHexString(new FNV1A().FNV1AHash("BSUIR")));
+        System.out.println(Long.toHexString(new FNV1A().FNV1AHash("BSUIR")));
     }
 }
